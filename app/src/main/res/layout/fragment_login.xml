@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <EditText
+            android:id="@+id/edit_text_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/grey_background"
+            android:hint="User Name"
+            android:textSize="15sp"
+            android:imeOptions="actionNext"
+            android:maxLines="1"
+            android:inputType="textEmailAddress"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
+
+        <EditText
+            android:id="@+id/edit_text_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/grey_background"
+            android:hint="Password"
+            android:textSize="15sp"
+            android:imeOptions="actionGo"
+            android:maxLines="1"
+            android:inputType="textPassword"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp"/>
+
+        <Button
+            android:id="@+id/button_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/black"
+            android:text="Login"
+            android:textSize="12sp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_gravity="end"
+            android:paddingHorizontal="50dp"/>
+    </LinearLayout>
+
+</RelativeLayout>

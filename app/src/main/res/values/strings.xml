@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">My Snappy</string>
+    <string name="time_spent_with_them_is_never_wasted">Time spent with them is never wasted</string>
+    <string name="get_started">Get started</string>
+    <string name="content_desc">Image</string>
+    <string name="my_snappy">My Snappy</string>
+    <string name="browse_by_category"><u>Browse by category</u></string>
+    <string name="see_all"><u>See all</u></string>
+</resources>
