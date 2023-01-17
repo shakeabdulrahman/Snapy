@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1083702347970",
+    "project_id": "snappy-c9ec5",
+    "storage_bucket": "snappy-c9ec5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1083702347970:android:fb0c0a9b47f8c360cb535b",
+        "android_client_info": {
+          "package_name": "com.example.snappy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1083702347970-gevg1pbpbuplfdsbbjspu6srvsus7clj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.snappy",
+            "certificate_hash": "6b2376ab51c1cf48c3bae0daebc9c101f09c3479"
+          }
+        },
+        {
+          "client_id": "1083702347970-irsdqb1pne1ngtirilk3v2ao5cqf4meh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqxm4DoPmY-ESMK-3u1wa3Qp0h1f4oIJ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1083702347970-irsdqb1pne1ngtirilk3v2ao5cqf4meh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

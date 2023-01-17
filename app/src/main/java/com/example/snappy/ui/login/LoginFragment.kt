@@ -1,5 +1,6 @@
 package com.example.snappy.ui.login
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,10 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import com.example.snappy.R
 import com.example.snappy.base.BaseFragment
 import com.example.snappy.databinding.FragmentLoginBinding
 import com.example.snappy.ui.MainActivity
 import com.example.snappy.viewmodel.SharedViewModel
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.AuthUI.IdpConfig.*
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
+import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import kotlinx.coroutines.launch
 
 
@@ -31,9 +39,11 @@ class LoginFragment: BaseFragment<FragmentLoginBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        checkLogin()
     }
+
+
+
+
 
     private fun checkLogin() {
 //        if (viewModel.isUserLoggedIn()) {

@@ -76,7 +76,7 @@
                         android:id="@+id/product_favor_in_button"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:src="@drawable/ic_heart_enabled"
+                        android:src="@{petsCard.isWishListed == true ? @drawable/ic_heart_enabled : @drawable/ic_heart_disabled}"
                         android:visibility="visible"
                         android:clickable="true"
                         android:focusable="true"

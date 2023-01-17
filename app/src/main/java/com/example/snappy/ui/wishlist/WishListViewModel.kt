@@ -1,4 +1,4 @@
-package com.example.snappy.ui.home
+package com.example.snappy.ui.wishlist
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -13,42 +13,29 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class WishListViewModel @Inject constructor(
     private val repository: MainRepository
 ) : ViewModel() {
 
     @Inject
     lateinit var privateSharedPreferencesManager: PrivateSharedPrefManager
 
-    var bannerImageUrl = arrayListOf(
-        "https://picsum.photos/id/237/200/300",
-        "https://picsum.photos/id/237/200/300",
-        "https://picsum.photos/id/237/200/300"
-    )
-
     private var db: FirebaseFirestore = Firebase.firestore
     private var tempWishListedPet: PetsDetail? = null
     private var tempWishListedPetList: ArrayList<PetsDetail> = arrayListOf()
     private var currentUserUID: String = FirebaseAuth.getInstance().currentUser?.uid!!
 
-    private val _petsList = MutableLiveData<ArrayList<PetsDetail>>()
-    val petsList: LiveData<ArrayList<PetsDetail>> = _petsList
+    private val _myWishList = MutableLiveData<ArrayList<PetsDetail>>()
+    val myWishList: LiveData<ArrayList<PetsDetail>> = _myWishList
 
     init {
-        _petsList.value = arrayListOf()
-        startPetsSnapListener()
-    }
+        _myWishList.value = arrayListOf()
 
-    fun loadFeedsList(list: ArrayList<PetsDetail>) {
-        _petsList.value = list
-    }
-
-    private fun startPetsSnapListener() {
-        val docRef = db.collection("PETS_LIST")
-
+        val docRef = db.collection("USERS").document(currentUserUID).collection("wishListed")
         docRef.addSnapshotListener { snapshot, e ->
             if (e != null) {
                 Log.w("FIREBASE_LISTENER", "Listen failed.", e)
@@ -56,14 +43,14 @@ class HomeViewModel @Inject constructor(
             }
 
             if (snapshot != null) {
-                _petsList.value?.clear()
+                _myWishList.value?.clear()
 
                 for (item in snapshot) {
                     val data = item.toObject<PetsDetail>()
-                    _petsList.value?.add(data)
+                    _myWishList.value?.add(data)
                 }
 
-                _petsList.value = _petsList.value
+                _myWishList.value = _myWishList.value
             } else {
                 Log.d("FIREBASE_LISTENER", "Current data: null")
             }
@@ -78,10 +65,6 @@ class HomeViewModel @Inject constructor(
             .addOnSuccessListener { result ->
                 tempWishListedPetList.clear()
 
-                if (result.isEmpty) {
-                    addToWishList()
-                }
-
                 for (document in result) {
                     val data = document.toObject<PetsDetail>()
                     tempWishListedPetList.add(data)
@@ -93,10 +76,6 @@ class HomeViewModel @Inject constructor(
                         break
                     }
                 }
-
-                if (!tempWishListedPetList.contains(tempWishListedPet)) {
-                    addToWishList()
-                }
             }
             .addOnFailureListener { exception ->
                 Log.d("LIST", "Error getting documents: ", exception)
@@ -104,15 +83,6 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun addToWishList() {
-        db.collection("PETS_LIST").document(tempWishListedPet!!.id)
-            .set(tempWishListedPet!!)
-            .addOnSuccessListener { documentReference ->
-                Log.d("WISHLIST", "Pet wishListed: $documentReference")
-            }
-            .addOnFailureListener { e ->
-                Log.w("TAG", "Error adding to wishlist", e)
-            }
-
         db.collection("USERS").document(currentUserUID).collection("wishListed")
             .add(tempWishListedPet!!)
             .addOnSuccessListener { documentReference ->
@@ -124,10 +94,14 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun removeFromWishList() {
-        db.collection("USERS").document(currentUserUID).collection("wishListed").document(tempWishListedPet!!.id)
-            .delete()
-            .addOnSuccessListener { documentReference ->
-                Log.d("WISHLIST", "removed from wishlist: $documentReference")
+        val itemRef = db.collection("USERS").document(currentUserUID).collection("wishListed")
+        db.collection("USERS").document(currentUserUID).collection("wishListed").whereEqualTo("id",tempWishListedPet!!.id)
+            .get()
+            .addOnCompleteListener { documentReference ->
+                for (item in documentReference.result) {
+                    itemRef.document(item.id).delete()
+                    Log.d("WISHLIST", "removed from wishlist: $documentReference")
+                }
             }
             .addOnFailureListener { e ->
                 Log.w("TAG", "Error removing from wishlist", e)
@@ -141,5 +115,23 @@ class HomeViewModel @Inject constructor(
             .addOnFailureListener { e ->
                 Log.w("TAG", "Error removing from wishlist", e)
             }
+    }
+
+    /** Search */
+
+    fun filter(text: String) {
+        val filteredList: ArrayList<PetsDetail> = ArrayList()
+
+        for (item in myWishList.value!!) {
+            if (item.name.lowercase(Locale.ROOT).contains(text.lowercase(Locale.ROOT))) {
+                filteredList.add(item)
+            }
+        }
+
+        if (filteredList.isEmpty()) {
+            _myWishList.value = filteredList
+        } else {
+            _myWishList.value = filteredList
+        }
     }
 }

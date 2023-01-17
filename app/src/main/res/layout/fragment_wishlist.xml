@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="view"
+            type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.example.snappy.ui.wishlist.WishListViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/default_padding"
+        android:scrollbars="none"
+        tools:context=".ui.ecommerce_module.categories.AllCategoryFragment">
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/layout_search_product"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layoutDirection="rtl"/>
+
+        <LinearLayout
+            android:visibility="@{viewModel.myWishList.empty ? view.VISIBLE : view.GONE}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/default_padding"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="@dimen/default_padding"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_search_product">
+
+            <TextView
+                style="@style/VeryLargeTextBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="Start Exploring Pets!" />
+
+            <TextView
+                android:visibility="gone"
+                style="@style/SmallTextBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="You haven't ordered any products yet" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_8" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_explore_pets"
+                style="@style/DefaultMaterialButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Explore Pets"
+                android:textAllCaps="true"
+                android:textAlignment="textStart"
+                tools:ignore="UnusedAttribute" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:visibility="@{viewModel.myWishList.empty ? view.GONE : view.VISIBLE}"
+            android:id="@+id/pets_recycler_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/default_padding"
+            android:clipToPadding="false"
+            app:wishList="@{viewModel.myWishList}"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="1"
+            tools:itemCount="2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_search_product"
+            tools:listitem="@layout/pets_list_cell" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

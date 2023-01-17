@@ -1,12 +1,14 @@
 package com.example.snappy.ui
 
 import android.Manifest
+import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
+import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -23,10 +25,15 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupWithNavController
 import com.example.snappy.R
 import com.example.snappy.base.PrivateSharedPrefManager
 import com.example.snappy.databinding.ActivityMainBinding
+import com.example.snappy.databinding.DialogLogoutSuccessBinding
+import com.example.snappy.ui.login.LoginActivity
+import com.example.snappy.ui.splash.SplashActivity
 import com.example.snappy.viewmodel.SharedViewModel
+import com.firebase.ui.auth.AuthUI
 import com.google.android.material.navigation.NavigationView
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.DexterBuilder
@@ -143,6 +150,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
         NavigationUI.setupWithNavController(navigationView!!, navController)
         navigationView!!.setNavigationItemSelectedListener(this)
+        binding.bottomNavView.setupWithNavController(navController)
 
         val headerView = navigationView!!.inflateHeaderView(R.layout.navigation_drawer_header)
         val profileName = headerView.findViewById<TextView>(R.id.profile_name)
@@ -150,11 +158,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-//            R.id.logout -> {
-//                privateSharedPrefManager?.clearCache()
-//                startActivity(Intent(this, LoginActivity::class.java))
-//                finish()
-//            }
+            R.id.logout -> {
+                AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener {
+                        showLogoutSuccessDialog()
+                    }
+            }
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
@@ -177,5 +187,30 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             //viewModel.togglePrinterSwitch()
             true
         } else super.onOptionsItemSelected(item)
+    }
+
+    private fun showLogoutSuccessDialog() {
+        val metrics = resources.displayMetrics
+        val width = metrics.widthPixels
+
+        val dialogBinding = DialogLogoutSuccessBinding.inflate(layoutInflater)
+        val dialog = Dialog(this)
+        dialog.setContentView(dialogBinding.root)
+        dialog.show()
+        dialog.setCanceledOnTouchOutside(true)
+        dialog.setCancelable(true)
+        dialog.window
+            ?.setLayout(
+                6 * width / 6,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+
+        val okayButton = dialogBinding.buttonOk
+        okayButton.setOnClickListener {
+            dialog.dismiss()
+            val intent = Intent(this, SplashActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 }

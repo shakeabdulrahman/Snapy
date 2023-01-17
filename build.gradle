@@ -5,15 +5,17 @@ buildscript {
         okhttpLoggingVersion = '5.0.0-alpha.2'
         retrofitVersion = '2.9.0'
         gsonVersion = '2.9.0'
-        hiltVersion = '2.42'
+        hiltVersion = '2.44.2'
         lifecycleExtensionVersion = '2.2.0'
         lifecycleVersion = '2.5.1'
         LottieVersion = '5.0.2'
         glideVersion = '4.13.0'
+        googleService = '4.3.14'
     }
 
     dependencies {
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
+        classpath "com.google.gms:google-services:$googleService"
     }
 }
 

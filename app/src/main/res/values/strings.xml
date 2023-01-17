@@ -6,4 +6,11 @@
     <string name="my_snappy">My Snappy</string>
     <string name="browse_by_category"><u>Browse by category</u></string>
     <string name="see_all"><u>See all</u></string>
+
+    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
+    <string name="facebook_application_id" translatable="false">1504573606692867</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb1504573606692867</string>
+    <string name="facebook_client_token">804814fb20416ebf9b6e413540391f58</string>
+
+    <string name="facebook_auth_callback">https://snappy-c9ec5.firebaseapp.com/__/auth/handler</string>
 </resources>

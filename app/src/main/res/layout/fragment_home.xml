@@ -21,6 +21,7 @@
         tools:context=".ui.ecommerce_module.categories.AllCategoryFragment">
 
         <LinearLayout
+            android:visibility="gone"
             android:id="@+id/layout_search_pet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -107,7 +108,7 @@
                     android:layout_marginTop="@dimen/default_padding"
                     android:clipToPadding="false"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:pets_list="@{viewModel.petsList}"
+                    app:petsList="@{viewModel.petsList}"
                     app:spanCount="1"
                     tools:itemCount="3"
                     tools:listitem="@layout/pets_list_cell"

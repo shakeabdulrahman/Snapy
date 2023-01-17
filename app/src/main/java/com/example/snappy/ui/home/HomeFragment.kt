@@ -1,8 +1,10 @@
 package com.example.snappy.ui.home
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +16,13 @@ import com.example.snappy.databinding.FragmentHomeBinding
 import com.example.snappy.ui.home.adapter.BannerAdapter
 import com.example.snappy.ui.home.adapter.PetsListAdapter
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 
 
 class HomeFragment: BaseFragment<FragmentHomeBinding>(), PetsListAdapter.CallBack {
@@ -28,6 +37,7 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(), PetsListAdapter.CallBac
     /** tab indicator for poster **/
     private lateinit var handler: Handler
     private var runnable: Runnable? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,12 +55,15 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(), PetsListAdapter.CallBac
         return binding.root
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         homeViewModel.petsList.observe(viewLifecycleOwner) {
-            if (it.isNotEmpty()) {
-                binding.recyclerViewPetsList.adapter?.notifyDataSetChanged()
+            if (it != null) {
+                if (it.isNotEmpty()) {
+                    binding.recyclerViewPetsList.adapter?.notifyDataSetChanged()
+                }
             }
         }
 
@@ -58,9 +71,13 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(), PetsListAdapter.CallBac
     }
 
     private fun initViews() {
+
         handler = Handler(Looper.getMainLooper()) //to initialize handler for sliding
         setUpViewPager()
-        homeViewModel.loadDummyData()
+
+        binding.searchButton.setOnClickListener {
+
+        }
     }
 
     private fun setUpViewPager() {
@@ -102,6 +119,10 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(), PetsListAdapter.CallBac
     }
 
     override fun onWishHeartClick(petsDetail: PetsDetail) {
-        // code here
+        petsDetail.apply {
+            isWishListed = !isWishListed
+        }
+
+        homeViewModel.getWishList(petsDetail)
     }
 }
